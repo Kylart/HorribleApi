@@ -6,6 +6,11 @@ HorribleApi is being developed mainly for KawAnime (rip Nyaa...) but anyone can 
 
 Any contribution is welcomed.
 
+# Installation
+```
+npm install --save horrible-api
+```
+
 # Use
 ```javascript
 const horribleApi = require('horrible-api')
