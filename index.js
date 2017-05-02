@@ -59,7 +59,7 @@ const getLatest = (quality) => {
           const parent = $(this).parent().parent()
           const magnetLink = parent.find('td.hs-magnet-link span a').attr('href')
 
-          if (result.length < 19)
+          if (result.length < 18)
             result.push({
               name: name,
               link: magnetLink
