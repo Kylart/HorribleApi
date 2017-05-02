@@ -1,0 +1,26 @@
+{
+  "name": "horrible-api",
+  "version": "1.0.0",
+  "description": "Unofficial API to scrap anime from horriblesubs.info",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kylart/HorribleApi.git"
+  },
+  "author": "Kylart",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kylart/horribleApi/issues"
+  },
+  "homepage": "https://github.com/Kylart/horribleApi#readme",
+  "devDependencies": {
+    "axios": "^0.16.1",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "cheerio": "^0.22.0",
+    "mocha": "^3.3.0"
+  }
+}
