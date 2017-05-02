@@ -52,7 +52,7 @@ const getLatest = (quality) => {
         const base = $(this).text().split(' ')
 
         const quality_ = base.slice(-1)[0].replace('[', '').replace(']', '')
-        const name = '[HorribleSubs] ' + base.slice(0, -3).join(' ')
+        const name = '[HorribleSubs] ' + base.slice(0, -1).join(' ')
 
         if (quality_ === quality)
         {
