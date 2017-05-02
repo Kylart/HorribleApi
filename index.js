@@ -164,17 +164,6 @@ const getMagnetsFromAnimeName = (data) => {
   })
 }
 
-getMagnetsFromAnimeName({
-  fromEp: 0,
-  untilEp: 500,
-  name: 'Ai-Mai-Mi',
-  quality: '480p'
-}).then((links) => {
-  console.log(links.length)
-}).catch((err) => {
-  console.log(err)
-})
-
 module.exports = {
   getShowsOnly,
   getNumberOfShows,
