@@ -1,5 +1,6 @@
 # HorribleApi
-
+[![Build Status](https://travis-ci.org/Kylart/HorribleApi.svg?branch=master)](https://travis-ci.org/Kylart/HorribleApi)
+ 
 This is an api allowing one to gather torrents directly from horriblesubs.info in around half a second.
 
 HorribleApi is being developed mainly for KawAnime (rip Nyaa...) but anyone can use it for its own purpose.
