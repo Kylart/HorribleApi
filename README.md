@@ -17,7 +17,7 @@ npm install --save horrible-api
 const horribleApi = require('horrible-api')
  
 // Want to get a list of all available anime ?
-console.log(horribleApi.getShowsOnly)
+console.log(horribleApi.getShowsOnly())
 
 // Want to know how many shows are avaible at the moment ?
 console.log(horribleApi.getNumberOfShows())
@@ -46,6 +46,12 @@ horribleApi.getMagnetsFromAnimeName({
   console.log(err)
 })
 ```
+
+# Dev
+```
+npm test
+```
+
 
 # Contributing
 
