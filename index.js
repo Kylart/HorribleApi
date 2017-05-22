@@ -37,11 +37,11 @@ const getLatest = (quality) => {
    *   - 1080p
    */
 
-  if (!['480p', '720p', '1080p'].includes(quality))
-    throw '[HorribleApi]: Quality does not match!'
-
   return new Promise((resolve, reject) => {
     const result = []
+
+    if (!['480p', '720p', '1080p'].includes(quality))
+      reject(new Error('[HorribleApi]: Quality does not match!'))
 
     axios.get(_LATEST_URL_).then(({data, status}) => {
       if (status !== 200) reject('[HorribleApi]: Could not reach horriblesubs.info')
@@ -130,13 +130,13 @@ const getMagnetsFromAnimeName = (data) => {
   const fromEp = data.fromEp || 0
   const untilEp = data.untilEp || 20000
 
-  if (!['480p', '720p', '1080p'].includes(quality))
-    throw '[HorribleApi]: Quality does not match!'
-
-  if (!getShowsOnly().includes(name))
-    throw '[HorribleApi]: Sorry, I do not know this name!'
-
   return new Promise((resolve, reject) => {
+	if (!['480p', '720p', '1080p'].includes(quality))
+	  reject(new Error('[HorribleApi]: Quality does not match!'))
+
+	if (!getShowsOnly().includes(name))
+      reject(new Error('[HorribleApi]: Sorry, I do not know this name!'))
+
     getMagnetsFromURI(fromEp, untilEp, quality, _SEARCH_URL_ + getShowsJSON()[name] + `&nextid=${nextid}`).then((links) => {
       if (links.length === 0)
       {
