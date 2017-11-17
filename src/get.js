@@ -1,7 +1,3 @@
-/**
- * Created by Kylart on 02/05/2017.
- */
-
 const {join} = require('path')
 
 const axios = require('axios')
@@ -9,9 +5,8 @@ const cheerio = require('cheerio')
 
 const _BASE_URL_ = 'http://horriblesubs.info/lib/'
 const _SEARCH_URL_ = _BASE_URL_ + 'getshows.php?type=show&showid='
-const _LATEST_URL_ = _BASE_URL_ + 'latest.php'
 
-const showsJSON = require(join(__dirname, 'resources', 'getShows.js')).getShows()
+const showsJSON = require(join(__dirname, '..', 'resources', 'getShows.js')).getShows()
 const showsOnly = Object.keys(showsJSON)
 
 const getShowsJSON = () => {
@@ -26,72 +21,22 @@ const getNumberOfShows = () => {
   return showsOnly.length
 }
 
-const getLatest = (quality) => {
-  /**
-   * Get the 18 latest releases from HorribleSubs and reports
-   * their name and magnet links
-   *
-   * Possible values for quality are
-   *   - 480p
-   *   - 720p
-   *   - 1080p
-   */
-
-  return new Promise((resolve, reject) => {
-    const result = []
-
-    if (!['480p', '720p', '1080p'].includes(quality))
-      reject(new Error('[HorribleApi]: Quality does not match!'))
-
-    axios.get(_LATEST_URL_).then(({data, status}) => {
-      if (status !== 200) reject('[HorribleApi]: Could not reach horriblesubs.info')
-
-      const $ = cheerio.load(data)
-
-      $('.dl-label i').each(function () {
-        const base = $(this).text().split(' ')
-
-        const quality_ = base.slice(-1)[0].replace('[', '').replace(']', '')
-        const name = '[HorribleSubs] ' + base.slice(0, -1).join(' ')
-
-        if (quality_ === quality)
-        {
-          const parent = $(this).parent().parent()
-          const magnetLink = parent.find('td.hs-magnet-link span a').attr('href')
-
-          if (result.length < 18)
-            result.push({
-              name: name,
-              link: magnetLink
-            })
-        }
-      })
-
-      resolve(result)
-    }).catch((err) => {
-      console.log('[HorribleApi]: An error occurred while reaching horriblesubs.info...\n' + err)
-    })
-  })
-}
-
 const getMagnetsFromURI = (fromEp, untilEp, quality, uri) => {
   return new Promise((resolve, reject) => {
     const result = []
 
     axios.get(uri).then(({data, status}) => {
-      if (status !== 200) reject('[HorribleApi]: Could not reach horriblesubs.info')
+      if (status !== 200) reject(new Error('[HorribleApi]: Could not reach horriblesubs.info'))
 
       const $ = cheerio.load(data)
 
       $('.release-links').each(function () {
         const quality_ = $(this).find('td.dl-label i').text().split(' ').slice(-1)[0].replace('[', '').replace(']', '')
 
-        if (quality_ === quality)
-        {
+        if (quality_ === quality) {
           const ep = parseInt($(this).find('td.dl-label i').text().split(' ').slice(-2, -1)[0])
 
-          if (ep <= untilEp && ep >= fromEp)
-          {
+          if (ep <= untilEp && ep >= fromEp) {
             const link = $(this).find('td.hs-magnet-link span.dl-link a').attr('href')
 
             result.push(link)
@@ -100,7 +45,6 @@ const getMagnetsFromURI = (fromEp, untilEp, quality, uri) => {
       })
 
       resolve(result)
-
     }).catch((err) => {
       console.log('[HorribleApi]: An error occurred while reaching horriblesubs.info...\n' + err)
     })
@@ -109,7 +53,6 @@ const getMagnetsFromURI = (fromEp, untilEp, quality, uri) => {
 
 let nextid = 0
 let result = []
-let searching = false
 
 const getMagnetsFromAnimeName = (data) => {
   /**
@@ -123,32 +66,24 @@ const getMagnetsFromAnimeName = (data) => {
    * If name is not in shows.json, this will throw an error.
    */
 
-  searching = true
-
   const quality = data.quality
   const name = data.name
   const fromEp = data.fromEp || 0
   const untilEp = data.untilEp || 20000
 
   return new Promise((resolve, reject) => {
-	if (!['480p', '720p', '1080p'].includes(quality))
-	  reject(new Error('[HorribleApi]: Quality does not match!'))
+    if (!['480p', '720p', '1080p'].includes(quality)) { reject(new Error('[HorribleApi]: Quality does not match!')) }
 
-	if (!getShowsOnly().includes(name))
-      reject(new Error('[HorribleApi]: Sorry, I do not know this name!'))
+    if (!getShowsOnly().includes(name)) { reject(new Error('[HorribleApi]: Sorry, I do not know this name!')) }
 
     getMagnetsFromURI(fromEp, untilEp, quality, _SEARCH_URL_ + getShowsJSON()[name] + `&nextid=${nextid}`).then((links) => {
-      if (links.length === 0)
-      {
+      if (links.length === 0) {
         resolve(result)
-        searching = false
 
         // Resetting for next search
         result = []
         nextid = 0
-      }
-      else
-      {
+      } else {
         result = [...result, ...links]
         ++nextid
         getMagnetsFromAnimeName(data).then((links) => {
@@ -157,9 +92,8 @@ const getMagnetsFromAnimeName = (data) => {
           throw err
         })
       }
-
     }).catch((err) => {
-      reject('[HorribleApi]: An error occurred...' + err)
+      reject(err)
     })
   })
 }
@@ -167,6 +101,5 @@ const getMagnetsFromAnimeName = (data) => {
 module.exports = {
   getShowsOnly,
   getNumberOfShows,
-  getLatest,
   getMagnetsFromAnimeName
 }
