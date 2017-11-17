@@ -1,6 +1,6 @@
 {
   "name": "horrible-api",
-  "version": "2.0.0",
+  "version": "1.1.0",
   "description": "Unofficial API to scrap anime from horriblesubs.info",
   "main": "index.js",
   "scripts": {
